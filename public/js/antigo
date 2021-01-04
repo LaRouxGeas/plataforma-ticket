@@ -1,0 +1,51 @@
+var dataTrans = new DataTransfer()
+
+
+$("#DeDCampo").on('drop', function(e) {
+		e.preventDefault();
+
+		$("#DeDArquivos").append(
+			$("<input>", {id: "idArquivo", type: "file", name: "arquivo", class: "input-hidden"})
+		);
+
+		$.each(e.originalEvent.dataTransfer.files, function (index, info) {
+			arquivoTipo = tipoArquivos(info.type);
+			// console.log(info);
+			console.log(index);
+			
+			// console.log(info.name.length);
+
+			if (info.name.length > 15) {
+				nomeR = info.name.slice(0, 10)+"-";
+				index = info.name.lastIndexOf(".");
+				nomeArquivo = nomeR+info.name.slice(index);
+			} else {
+				nomeArquivo = info.name;
+			}
+
+			console.log(nomeArquivo);
+
+			$("#DeDArquivos").append(
+				$("<div>", {class: "t-arquivo-item", title: info.name}).append(
+					$("<span>", {class:"t-arquivo-imagem "+arquivoTipo}),
+					$("<label>", {class:"t-arquivo-nome"}).text(nomeArquivo)
+				)
+			);
+			
+			// $("#idArquivo"+inputN)[0].files = e.originalEvent.dataTransfer.files;
+		});
+
+
+		if ($("#idArquivo")[0].files.length == 0) {
+			$("#idArquivo")[0].files = e.originalEvent.dataTransfer.files;
+		} else {
+			var formData = new FormData();
+			formData.append("arquivosAnteriores", $("#idArquivo")[0].files);
+			$("#idArquivo")[0].files = e.originalEvent.dataTransfer.files;
+			console.log(formData);
+		}
+
+		// arquivos = $("#idArquivo")[0].files;
+
+
+	});
